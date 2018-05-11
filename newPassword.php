@@ -111,13 +111,13 @@ class NewPasswordPlugin {
                     'not_found_in_trash' => __('No Clients found in Trash'),
                     'all_items' => __('All Clients'),
                     'archives' => __('Client Archives'),
-                    'attributes' => __('Client Attributes'),
-                    'attributes' => __('Client Attributes')        
+                    'attributes' => __('Client Attributes')       
                 ),
                 'public' => true,
                 'has_archive' => true,
                 'rewrite' => array('slug' => 'New Clients'),
                 'menu_position' => 100,
+                'supports' => false
             )
         );
     }
@@ -136,6 +136,9 @@ class NewPasswordPlugin {
         );
     }
 
+    public function remove_metaboxes() {
+        remove_meta_box( $id, 'post', 'advanced' );
+    }
 
     public function add_metaboxes_newclients() {
         $screens = ['post', 'cpt_newclients'];
