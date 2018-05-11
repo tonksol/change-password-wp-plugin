@@ -21,7 +21,10 @@ class NewPasswordPlugin {
         add_filter('the_content', array($this, 'addLoginContent'));
         add_action('admin_post_new_password_hook', array($this, 'formValidation'));
         
-        add_action('init', array($this,'add_admin_menu')); // add a menu in the WordPress admin panal
+        // hooks for admin
+        add_action('init', array($this,'add_newclients_to_admin')); // add a menu in the WordPress admin panal
+        add_filter('manage_cpt_newclients_posts_columns' , array($this,'add_columns_to_newclients'));
+        add_action('add_meta_boxes', array($this, 'add_metaboxes_newclients'));
     }
 
     function addInHeadForLogin() {
@@ -85,38 +88,89 @@ class NewPasswordPlugin {
         return $content;
     }
 
-    function add_admin_menu() {
+/* 
+------------------------
+    ADMIN
+------------------------
+*/
+    public function add_newclients_to_admin() {
         register_post_type( 'cpt_newclients',
         // CPT Options
             array(
                 'labels' => array(
-                    'name' => __( 'New Clients' ),
-                    'singular_name' => __( 'New client' )
+                    'name' => __('New Clients'),
+                    'singular_name' => __('New client'),
+                    'add_new' => __('Add Client'),
+                    'add_new_item' => __('Add New Client'), // post edit screen
+                    'edit_item' => __('Edit Client'),
+                    'new_item' => __('New Client'),
+                    'view_item' => __('View Client'),
+                    'view_items' => __('View Clients'),
+                    'search_items' => __('Search Clients'),
+                    'not_found' => __('No Clients found'),
+                    'not_found_in_trash' => __('No Clients found in Trash'),
+                    'all_items' => __('All Clients'),
+                    'archives' => __('Client Archives'),
+                    'attributes' => __('Client Attributes'),
+                    'attributes' => __('Client Attributes')        
                 ),
                 'public' => true,
                 'has_archive' => true,
-                'rewrite' => array('slug' => 'movies'),
+                'rewrite' => array('slug' => 'New Clients'),
+                'menu_position' => 100,
             )
         );
     }
 
-
-    function showNewClients( $user_id ){
-        $args = [
-            'post_type'      => 'product',
-            'posts_per_page' => 10,
-        ];
-        $loop = new WP_Query($args);
-        while ($loop->have_posts()) {
-            $loop->the_post();
-            ?>
-            <div class="entry-content">
-                <?php the_title(); ?>
-                <?php the_content(); ?>
-            </div>
-            <?php
-        }
+    
+    public function add_columns_to_newclients() {
+        return array(
+            'cb' => '<input type="checkbox" />',
+            'firstname' => __('First Name'),
+            'prefix' => __('Prefix'),
+            'lastname' => __('Last Name'),
+            'email' => __('Email'),
+            'wachtwoord' =>__( 'Password'),
+            'redirect' => __('Redirect to'),
+            'date' => __('Date')
+        );
     }
+
+
+    public function add_metaboxes_newclients() {
+        $screens = ['post', 'cpt_newclients'];
+        foreach ($screens as $screen) {
+            add_meta_box(
+                'newclients_box_id',                    // Unique ID
+                'Add Client Info',                // Box title
+                array($this,'newclients_box_html'),     // Content callback, must be of type callable
+                $screen                                 // Post type
+            );
+        }
+        
+      }
+
+        /* Display the post meta box. */
+    public function newclients_box_html() {
+        ?>
+        <form>
+        <input type="text" name="firstname" placeholder="First Name"> 
+        <br><br>
+        <input type="text" name="prefix" placeholder="Prefix"> 
+        <br><br>
+        <input type="text" name="lastname" placeholder="Last Name"> 
+        <br><br>
+        <input type="text" name="email" placeholder="Email">
+        <br><br>
+        <input type="text" name="password" placeholder="Password"> 
+        <br><br>
+        <?php
+    }
+    
+
+
+
+
 
     // https://premium.wpmudev.org/blog/handling-form-submissions/
     public function formValidation() {
