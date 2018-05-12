@@ -199,6 +199,7 @@ class NewPasswordPlugin {
         <br><br>
         <input type="text" name="password" placeholder="Password"> 
         <br><br>
+        <input type="text" name="redirect" placeholder="url"
         <?php
     }
 
@@ -223,7 +224,6 @@ class NewPasswordPlugin {
         if ( isset( $_POST['email'] ) && is_email($_POST['email'])) {
             update_post_meta($post_id, 'email', sanitize_text_field( $_POST['email']));
         } elseif (isset( $_POST['email'] ) && is_email($_POST['email']) == false) {
-            // update_post_meta($post_id, 'email', sanitize_text_field("Not an email"));
             wp_die("not an email");
         }
         if ( isset( $_POST['password'] ) ) {
