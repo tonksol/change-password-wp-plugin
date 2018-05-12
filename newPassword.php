@@ -212,26 +212,27 @@ class NewPasswordPlugin {
         if ( "cpt_newclients" != $post_type ) return; // If this isn't a post for 'cpt_newclients', don't update it.
 
         if ( isset( $_POST['firstname'] ) ) {
-            update_post_meta( $post_id, 'firstname', sanitize_text_field( $_POST['firstname'] ) );
+            update_post_meta($post_id, 'firstname', sanitize_text_field( $_POST['firstname']));
         }
         if ( isset( $_POST['prefix'] ) ) {
-            update_post_meta( $post_id, 'prefix', sanitize_text_field( $_POST['prefix'] ) );
+            update_post_meta($post_id, 'prefix', sanitize_text_field( $_POST['prefix']));
         }
         if ( isset( $_POST['lastname'] ) ) {
-            update_post_meta( $post_id, 'lastname', sanitize_text_field( $_POST['lastname'] ) );
+            update_post_meta($post_id, 'lastname', sanitize_text_field( $_POST['lastname']));
         }
-        if ( isset( $_POST['email'] ) ) {
-            update_post_meta( $post_id, 'email', sanitize_text_field( $_POST['email'] ) );
+        if ( isset( $_POST['email'] ) && is_email($_POST['email'])) {
+            update_post_meta($post_id, 'email', sanitize_text_field( $_POST['email']));
+        } elseif (isset( $_POST['email'] ) && is_email($_POST['email']) == false) {
+            // update_post_meta($post_id, 'email', sanitize_text_field("Not an email"));
+            wp_die("not an email");
         }
         if ( isset( $_POST['password'] ) ) {
-            update_post_meta( $post_id, 'password', sanitize_text_field( $_POST['password'] ) );
+            update_post_meta( $post_id, 'password', sanitize_text_field( $_POST['password']));
         }
         if ( isset( $_POST['redirect'] ) ) {
-            update_post_meta( $post_id, 'redirect', sanitize_text_field( $_POST['redirect'] ) );
+            update_post_meta( $post_id, 'redirect', sanitize_text_field( $_POST['redirect']));
         }
     }
-
-
 
     // https://premium.wpmudev.org/blog/handling-form-submissions/
     public function formValidation() {
@@ -240,12 +241,6 @@ class NewPasswordPlugin {
         }
     }
 
-    public function createNewClient() {
-        $current_user = wp_get_current_user();
-        if (user_can( $current_user, 'administrator' )) {
-        // user is an admin
-        }
-    }
 
  } // ./ class NewPasswordPlugin
 
