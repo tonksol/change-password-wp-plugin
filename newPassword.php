@@ -166,19 +166,20 @@ class NewPasswordPlugin {
         }
     }
 
+    // Add a metabox, it will show after you have clicked on "Add client".
     public function add_metaboxes_newclients() {
         $screens = ['post', 'cpt_newclients'];
         foreach ($screens as $screen) {
             add_meta_box(
                 'newclients_box_id',                    // Unique ID
                 'Add Client Info',                      // Box title
-                array($this,'newclients_box_html'),     // Content callback, must be of type callable
+                array($this,'newclients_box_html'),     // Content callback, function below
                 $screen                                 // Post type
             );
         }
     }
 
-    // Display the post meta box.
+    // Add content, in this case the input fields, to the metabox. 
     public function newclients_box_html() {
         ?>
         <input type="text" name="firstname" placeholder="First Name"> 
@@ -197,19 +198,13 @@ class NewPasswordPlugin {
         /**
      * Save post metadata when a post is saved.
      *
-     * @param int $post_id The post ID.
-     * @param post $post The post object.
-     * @param bool $update Whether this is an existing post being updated or not.
+     *$update Whether this is an existing post being updated or not.
      */
     public function save_newclient_meta_data($post_id) {
-        /*
-        * In production code, $slug should be set only once in the plugin,
-        * preferably as a class property, rather than in each function that needs it.
-        */
         $post_type = get_post_type($post_id);
-
         // If this isn't a post for 'cpt_newclients', don't update it.
         if ( "cpt_newclients" != $post_type ) return;
+
         if ( isset( $_POST['firstname'] ) ) {
             update_post_meta( $post_id, 'firstname', sanitize_text_field( $_POST['firstname'] ) );
         }
