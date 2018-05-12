@@ -225,12 +225,10 @@ function read_columns($column, $post_id) {
         // - Update the post's metadata.
         if ( isset( $_POST['firstname'] ) ) {
             update_post_meta( $post_id, 'firstname', sanitize_text_field( $_POST['firstname'] ) );
-            error_log("hij komt in de isset(firstname): " . $_POST['firstname']);
         }
 
         if ( isset( $_POST['prefix'] ) ) {
             update_post_meta( $post_id, 'prefix', sanitize_text_field( $_POST['prefix'] ) );
-            error_log("hij komt in de isset(prefix)");
         }
 
     
