@@ -96,15 +96,15 @@ class NewPasswordPlugin {
     ADMIN
 ------------------------
 */
+    // Create Custom Post Type (CPT) New Clients
     public function add_newclients_to_admin() {
         register_post_type( 'cpt_newclients',
-        // CPT Options
             array(
                 'labels' => array(
                     'name' => __('New Clients'),
                     'singular_name' => __('New client'),
                     'add_new' => __('Add Client'),
-                    'add_new_item' => __('Add New Client'), // post edit screen
+                    'add_new_item' => __('Add New Client'),
                     'edit_item' => __('Edit Client'),
                     'new_item' => __('New Client'),
                     'view_item' => __('View Client'),
@@ -125,7 +125,7 @@ class NewPasswordPlugin {
         );
     }
 
-    
+    // Add the columns for the CPT
     public function add_columns_to_newclients() {
         return array(
             'cb' => '<input type="checkbox" />',
@@ -139,42 +139,32 @@ class NewPasswordPlugin {
         );
     }
 
-
-    
-
-function read_columns($column, $post_id) {
-	switch ( $column ) {
-	     case 'firstname':
-		 	echo get_post_meta($post_id, 'firstname', true);
-             break;
-		case 'prefix':
-			echo get_post_meta( $post_id, 'prefix', true ); 
-            break;
-        case 'lastname':
-			echo get_post_meta( $post_id, 'lastname', true ); 
-			break;
-	}
-}
-
-
-// add_action( 'manage_posts_custom_column' , 'custom_columns', 10, 2 );
-// 
-// function custom_columns( $column, $post_id ) {
-// 	switch ( $column ) {
-// 		case 'book_author':
-// 			$terms = get_the_term_list( $post_id, 'book_author', '', ',', '' );
-// 			if ( is_string( $terms ) ) {
-// 				echo $terms;
-// 			} else {
-// 				_e( 'Unable to get author(s)', 'your_text_domain' );
-// 			}
-// 			break;
-// 
-// 		case 'publisher':
-// 			echo get_post_meta( $post_id, 'publisher', true ); 
-// 			break;
-// 	}
-// }
+    // Displays the data in the columns
+    public function read_columns($column, $post_id) {
+        switch ( $column ) {
+            case 'firstname':
+                echo get_post_meta($post_id, 'firstname', true);
+                break;
+            case 'prefix':
+                echo get_post_meta( $post_id, 'prefix', true ); 
+                break;
+            case 'lastname':
+                echo get_post_meta( $post_id, 'lastname', true ); 
+                break;
+            case 'email':
+                echo get_post_meta( $post_id, 'email', true ); 
+                break;
+            case 'password':
+                echo get_post_meta( $post_id, 'password', true ); 
+                break;
+            case 'redirect':
+                echo get_post_meta( $post_id, 'lastname', true ); 
+                break;
+            case 'date':
+                echo get_post_meta( $post_id, 'date', true ); 
+                break;
+        }
+    }
 
     public function add_metaboxes_newclients() {
         $screens = ['post', 'cpt_newclients'];
@@ -230,13 +220,13 @@ function read_columns($column, $post_id) {
             update_post_meta( $post_id, 'lastname', sanitize_text_field( $_POST['lastname'] ) );
         }
         if ( isset( $_POST['email'] ) ) {
-            update_post_meta( $post_id, 'lastname', sanitize_text_field( $_POST['lastname'] ) );
+            update_post_meta( $post_id, 'email', sanitize_text_field( $_POST['email'] ) );
         }
         if ( isset( $_POST['password'] ) ) {
-            update_post_meta( $post_id, 'lastname', sanitize_text_field( $_POST['lastname'] ) );
+            update_post_meta( $post_id, 'password', sanitize_text_field( $_POST['password'] ) );
         }
         if ( isset( $_POST['redirect'] ) ) {
-            update_post_meta( $post_id, 'lastname', sanitize_text_field( $_POST['lastname'] ) );
+            update_post_meta( $post_id, 'redirect', sanitize_text_field( $_POST['redirect'] ) );
         }
     }
 
