@@ -143,25 +143,32 @@ class NewPasswordPlugin {
     public function read_columns($column, $post_id) {
         switch ( $column ) {
             case 'firstname':
-                echo get_post_meta($post_id, 'firstname', true);
+                $fname = get_post_meta($post_id, 'firstname', true);
+                echo sanitize_text_field($fname);
                 break;
             case 'prefix':
-                echo get_post_meta( $post_id, 'prefix', true ); 
+                $prefix = get_post_meta( $post_id, 'prefix', true ); 
+                echo sanitize_text_field($prefix);
                 break;
             case 'lastname':
-                echo get_post_meta( $post_id, 'lastname', true ); 
+                $lname = get_post_meta( $post_id, 'lastname', true ); 
+                echo sanitize_text_field($lname);
                 break;
             case 'email':
-                echo get_post_meta( $post_id, 'email', true ); 
+                $email = get_post_meta( $post_id, 'email', true ); 
+                echo sanitize_text_field($email);
                 break;
             case 'password':
-                echo get_post_meta( $post_id, 'password', true ); 
+                $password = get_post_meta( $post_id, 'password', true); 
+                echo sanitize_text_field($password);
                 break;
             case 'redirect':
-                echo get_post_meta( $post_id, 'lastname', true ); 
+                $redirect = get_post_meta( $post_id, 'redirect', true );
+                echo sanitize_text_field($redirect); 
                 break;
             case 'date':
-                echo get_post_meta( $post_id, 'date', true ); 
+                $date = get_post_meta( $post_id, 'date', true ); 
+                echo sanitize_text_field($date);
                 break;
         }
     }
@@ -195,15 +202,14 @@ class NewPasswordPlugin {
         <?php
     }
 
-        /**
-     * Save post metadata when a post is saved.
-     *
-     *$update Whether this is an existing post being updated or not.
-     */
+
+     //$update Whether this is an existing post being updated or not.
+    
+    // Save the input data. 
     public function save_newclient_meta_data($post_id) {
         $post_type = get_post_type($post_id);
-        // If this isn't a post for 'cpt_newclients', don't update it.
-        if ( "cpt_newclients" != $post_type ) return;
+        
+        if ( "cpt_newclients" != $post_type ) return; // If this isn't a post for 'cpt_newclients', don't update it.
 
         if ( isset( $_POST['firstname'] ) ) {
             update_post_meta( $post_id, 'firstname', sanitize_text_field( $_POST['firstname'] ) );
