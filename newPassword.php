@@ -133,7 +133,7 @@ class NewPasswordPlugin {
             'prefix' => __('Prefix'),
             'lastname' => __('Last Name'),
             'email' => __('Email'),
-            'wachtwoord' =>__( 'Password'),
+            'password' =>__( 'Password'),
             'redirect' => __('Redirect to'),
             'date' => __('Date')
         );
@@ -143,7 +143,6 @@ class NewPasswordPlugin {
     
 
 function read_columns($column, $post_id) {
-    error_log("Reading column $column for post $post_id");
 	switch ( $column ) {
 	     case 'firstname':
 		 	echo get_post_meta($post_id, 'firstname', true);
@@ -219,21 +218,27 @@ function read_columns($column, $post_id) {
         */
         $post_type = get_post_type($post_id);
 
-        // If this isn't a 'book' post, don't update it.
+        // If this isn't a post for 'cpt_newclients', don't update it.
         if ( "cpt_newclients" != $post_type ) return;
-        
-        // - Update the post's metadata.
         if ( isset( $_POST['firstname'] ) ) {
             update_post_meta( $post_id, 'firstname', sanitize_text_field( $_POST['firstname'] ) );
         }
-
         if ( isset( $_POST['prefix'] ) ) {
             update_post_meta( $post_id, 'prefix', sanitize_text_field( $_POST['prefix'] ) );
         }
-
-    
+        if ( isset( $_POST['lastname'] ) ) {
+            update_post_meta( $post_id, 'lastname', sanitize_text_field( $_POST['lastname'] ) );
+        }
+        if ( isset( $_POST['email'] ) ) {
+            update_post_meta( $post_id, 'lastname', sanitize_text_field( $_POST['lastname'] ) );
+        }
+        if ( isset( $_POST['password'] ) ) {
+            update_post_meta( $post_id, 'lastname', sanitize_text_field( $_POST['lastname'] ) );
+        }
+        if ( isset( $_POST['redirect'] ) ) {
+            update_post_meta( $post_id, 'lastname', sanitize_text_field( $_POST['lastname'] ) );
+        }
     }
-    // add_action( 'save_post', 'save_book_meta', 10, 3 );
 
 
 
